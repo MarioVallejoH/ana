@@ -3,7 +3,6 @@ import 'package:customer_app/theme/color.dart';
 import 'package:customer_app/theme/theme.dart';
 import 'package:customer_app/user/controllers/user_controller.dart';
 import 'package:customer_app/user/widgets/editable_fields.dart';
-import 'package:customer_app/user/widgets/photo_info.dart';
 import 'package:customer_app/utils/constant.dart';
 // import 'package:customer_app/widgets/dialogs_alerts/cool_snackbar_dialog.dart';
 import 'package:flutter/material.dart';
@@ -52,11 +51,7 @@ class UserScreen extends GetView<UserController> {
                       ),
                     ]);
                 if (value == true) {
-                  if (controller.editUserData) {
-                    controller.editUserData = false;
-                  } else {
-                    controller.editUserData = true;
-                  }
+                  
                 } else if (value == false) {
                   finish(context);
                 }
@@ -70,7 +65,6 @@ class UserScreen extends GetView<UserController> {
       ),
       body: Column(
         children: [
-          const PhotoInfo(),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 8),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
