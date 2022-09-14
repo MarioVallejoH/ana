@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 
 import 'package:customer_app/theme/color.dart';
 import 'package:customer_app/utils/formating/data_formating.dart';
-import 'package:customer_app/widgets/preference_card.dart';
 import 'package:customer_app/widgets/qtty_controll_widget.dart';
 import 'package:customer_app/widgets/unit_card.dart';
 import 'package:customer_app/widgets/prod_det_sel_sekeleton.dart';
@@ -44,8 +43,6 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   double? selectedPrice;
   double qtty = 1;
-  final _pPreferencesController =
-      StreamController<Map<int, List<ProductPreference>>?>();
   final _prodUnitsController = StreamController<List<UnitPrice>?>();
 
   final _productsDataService = ProductsDataService();
@@ -59,10 +56,8 @@ class _ProductDetailsState extends State<ProductDetails> {
         _productsDataService.findProductUnitPrices(widget.product.id,
             Get.find<AuthController>().state?.companyData?.customerGroupId,
             unitId: 0),
-        _productsDataService.findProductPreferences(widget.product.id),
       ]);
       _prodUnitsController.sink.add(responses[0]);
-      _pPreferencesController.sink.add(responses[1]);
       taxRateMethod = Get.find<ProductsRelatedController>()
           .getProductTaxRateMethod(widget.product.taxRate ?? 0);
     });
@@ -71,7 +66,6 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   @override
   void dispose() {
-    _pPreferencesController.close();
     _prodUnitsController.close();
     super.dispose();
   }
@@ -157,9 +151,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             SliverToBoxAdapter(
               child: _buildProductUnits(),
             ),
-            SliverToBoxAdapter(
-              child: _buildProductPrefs(),
-            ),
+            
           ]),
         ),
         bottomNavigationBar: _bottomBar(context),
@@ -389,86 +381,6 @@ class _ProductDetailsState extends State<ProductDetails> {
     );
   }
 
-  Widget _buildProductPrefs() {
-    return StreamBuilder(
-      stream: _pPreferencesController.stream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          List<Widget> children = [];
-
-          snapshot.data!.forEach((key, pP) {
-            final prefCat =
-                Get.find<ProductsRelatedController>().getPrefCategory(key);
-            if (prefCat != null && !initPrefsMap) {
-              _selectedPrefs[prefCat] = List.empty(growable: true);
-              initPrefsMap = true;
-            }
-            List<String?> subtitlePrefCat = ['', '', ''];
-            if ((prefCat?.required == 1)) {
-              subtitlePrefCat[0] = ('Requerido, ');
-            } else {
-              subtitlePrefCat[1] = ('Opcional, ');
-            }
-            if (prefCat?.selectionLimit != null) {
-              subtitlePrefCat[1] = ('(Máximo ${prefCat?.selectionLimit})');
-            } else {
-              subtitlePrefCat[1] = (null);
-            }
-
-            children.add(_selectionTitle(context,
-                title: prefCat?.name,
-                subtitle: subtitlePrefCat,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6, horizontal: 10)));
-            for (ProductPreference pPref in pP) {
-              bool isSelected = _selectedPrefs[prefCat]
-                      ?.where((element) => (element.id == pPref.id))
-                      .isNotEmpty ??
-                  false;
-              children.add(Column(
-                children: [
-                  PreferenceCard(
-                      onTap: () {
-                        if (_selectedPrefs[prefCat] == null) {
-                          if (prefCat != null) _selectedPrefs[prefCat] = [];
-                        }
-                        if (_selectedPrefs[prefCat]!
-                            .where((element) => element.id == pPref.id)
-                            .isEmpty) {
-                          // print('here');
-                          if ((prefCat?.selectionLimit ?? 99) >
-                              _selectedPrefs[prefCat]!.length) {
-                            _selectedPrefs[prefCat]!.add(pPref);
-                          } else {
-                            _selectedPrefs[prefCat]!.removeAt(0);
-                            _selectedPrefs[prefCat]!.add(pPref);
-                          }
-                        } else {
-                          _selectedPrefs[prefCat]!
-                              .removeWhere((element) => element.id == pPref.id);
-                        }
-                        setState(() {});
-                      },
-                      prodPref: pPref,
-                      isSelected: isSelected),
-                  const Divider(
-                    height: 2,
-                    thickness: 1,
-                  )
-                ],
-              ));
-            }
-          });
-
-          return Column(
-            children: children,
-          );
-        }
-        return const ProdDetSelectionSkeleton();
-      },
-    );
-  }
-
   Widget _unitCard(dynamic unit, double value) {
     double priceWIva = value;
     if (widget.product.taxMethod == 1) {
@@ -509,7 +421,6 @@ class _ProductDetailsState extends State<ProductDetails> {
               final item = CartItem(
                   price: selectedPrice!,
                   qtty: qtty,
-                  preferences: _selectedPrefs,
                   unitsModel: selectedUnit,
                   product: widget.product);
               Get.find<CartController>().addProductToCart(item);

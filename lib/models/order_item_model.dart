@@ -242,7 +242,7 @@ class OrderSaleItemsModel {
           unitQuantity: product.quantity / (unit?.operationValue ?? 1),
           productUnitId: unit?.id,
           tax: taxRate?.name,
-          preferences: item.getProductPrefsIds(),
+          preferences: "",
           subtotal: pIVA * item.qtty);
       orderSaleItems.add(orderSaleItem.toJson());
     }

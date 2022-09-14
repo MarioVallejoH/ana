@@ -22,8 +22,6 @@ class DatesSelection extends GetView<CartController> {
         final choiceCard = AppButton(
           onTap: () async {
             if (isSelected) {
-              await controller.setDeliveryDate(buttonDate);
-              controller.setDeliveryTime(null);
             }
           },
           width: 0,

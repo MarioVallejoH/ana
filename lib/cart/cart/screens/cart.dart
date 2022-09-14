@@ -95,7 +95,6 @@ class Cart extends GetView<CartController> {
                   }
                 } else {
                   _index.value += 1;
-                  await controller.getNewDeliveryTimes();
                 }
               },
               shapeBorder: RoundedRectangleBorder(

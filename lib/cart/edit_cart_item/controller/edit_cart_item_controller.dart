@@ -20,7 +20,6 @@ class EditCartItemController extends GetxController with StateMixin<int> {
 
   Future<void> loadData() async {
     change(0, status: RxStatus.loading());
-    _preferences.value = cartItem.preferences ?? {};
     _unitSelected.value = cartItem.unitsModel;
     _price.value = cartItem.price;
     _quantity.value = cartItem.qtty;

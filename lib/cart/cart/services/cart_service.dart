@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:customer_app/endpoints_dir.dart';
 import 'package:customer_app/models/address_model.dart';
 import 'package:customer_app/models/biller_data_model.dart';
-import 'package:customer_app/models/delivery_time_model.dart';
 import 'package:customer_app/orders/orders_list/models/order_model.dart';
 import 'package:customer_app/auth/models/user_data_model.dart';
 import 'package:customer_app/providers/data_provider.dart';
@@ -23,29 +22,6 @@ class CartService {
     Map<String, dynamic> cartMap = {};
     List<String> prefData = [];
     for (CartItem cItem in cartData ?? []) {
-      if (cItem.preferences != null) {
-        String prefsText = '';
-        cItem.preferences?.forEach((key, value) {
-          List<Map> prefs = [];
-          for (ProductPreference pref in value) {
-            prefs.add(pref.toJson());
-          }
-          if (prefsText.isNotEmpty) {
-            // prefsText = '';
-            prefsText += '~~' + (jsonEncode(key) + '|' + jsonEncode(prefs));
-          } else {
-            prefsText += (jsonEncode(key) + '|' + jsonEncode(prefs));
-          }
-        });
-        if (prefData.isNotEmpty) {
-          prefData.add(prefsText);
-        } else {
-          prefData.add(prefsText);
-        }
-      } else {
-        prefData.add('');
-      }
-
       final cartItemData = {
         "product_data": cItem.product.toJson(),
         "unit_selected": cItem.unitsModel?.toJson(),
@@ -128,11 +104,11 @@ class CartService {
             final price = parsingToDoubleNullAble(cartItemData['price']);
             try {
               cart.add(CartItem(
-                  product: product,
-                  unitsModel: unit,
-                  price: price!,
-                  qtty: qtty,
-                  preferences: prefs));
+                product: product,
+                unitsModel: unit,
+                price: price!,
+                qtty: qtty,
+              ));
             } catch (e) {
               log(e);
             }
@@ -193,26 +169,6 @@ class CartService {
 
   Future<void> removeSavedCart() async {
     await removeKey('cart_data');
-  }
-
-  Future<List<DeliveryTime>> getAvaibleDelivTimes(
-      String deliveryDate, String location) async {
-    List<DeliveryTime> delivTimes = [];
-
-    final res = await DataProvider.postPetition(
-      avDeliveryTimesEndp,
-      {'date': deliveryDate, 'location': location},
-    );
-
-    if (res['success'] ?? false) {
-      try {
-        delivTimes = DeliveryTime.fromJsonList(res['data']);
-      } catch (e) {
-        log(e);
-      }
-    }
-
-    return delivTimes;
   }
 
   Future<Map<String, dynamic>> sendCart(

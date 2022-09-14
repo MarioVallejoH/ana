@@ -140,7 +140,6 @@ class CartItemCard extends GetView<CartController> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       _unitDetails(context),
-                      _prefsText(context),
                       _qttyControll(context)
                     ],
                   ).paddingLeft(10).expand(),
@@ -205,23 +204,7 @@ class CartItemCard extends GetView<CartController> {
     ).paddingOnly(right: 16);
   }
 
-  Widget _prefsText(context) {
-    List<TextSpan> children = [];
-    final prefs = cartItem.prefsText();
-    if (prefs.isNotEmpty) {
-      children.add(TextSpan(
-        text: prefs,
-        style: ThemeConf().normalTextStyle(context, fontSizeFactor: 0.95),
-      ));
-      // });
-    }
-    return cartItem.preferences == null ||
-            (cartItem.preferences?.isEmpty ?? false)
-        ? const SizedBox(
-            height: 14,
-          )
-        : RichText(text: TextSpan(children: children));
-  }
+  
 
   Widget _unitDetails(BuildContext context) {
     return cartItem.unitsModel != null

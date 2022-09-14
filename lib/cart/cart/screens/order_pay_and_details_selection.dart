@@ -1,10 +1,7 @@
 import 'package:customer_app/cart/cart/controllers/cart_controller.dart';
 import 'package:customer_app/cart/widgets/address_selected.dart';
-import 'package:customer_app/cart/widgets/dates_selection.dart';
-import 'package:customer_app/cart/widgets/delivery_time_selection.dart';
 import 'package:customer_app/cart/widgets/paymethod_selected.dart';
 import 'package:customer_app/cart/widgets/total_info.dart';
-import 'package:customer_app/theme/theme.dart';
 import 'package:customer_app/widgets/custom_round_text_form.dart';
 
 import 'package:flutter/material.dart';
@@ -24,34 +21,8 @@ class OrderPayAndOther extends GetView<CartController> {
           children: [
             const AddressSelected()
                 .paddingSymmetric(horizontal: 7, vertical: 4),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Escoja una fecha de entrega',
-                  style: ThemeConf().normalTextStyle(context),
-                ).paddingOnly(bottom: 4),
-                const Divider(
-                  height: 1,
-                ),
-              ],
-            ).paddingOnly(left: 16, right: 16),
-            const DatesSelection()
-                .paddingSymmetric(horizontal: 10, vertical: 4),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Escoja franja horaria',
-                  style: ThemeConf().normalTextStyle(context),
-                ).paddingOnly(bottom: 4),
-                const Divider(
-                  height: 1,
-                ),
-              ],
-            ).paddingOnly(left: 16, right: 16),
-            const DeliveryTimeSelection()
-                .paddingSymmetric(horizontal: 10, vertical: 4),
+            
+            
             const PayMethodSelected()
                 .paddingSymmetric(horizontal: 10, vertical: 4),
             const TotalInfo().paddingSymmetric(horizontal: 10, vertical: 4),

@@ -17,8 +17,12 @@ class OrderModel {
   OrderModel({
     this.id,
     this.date,
+    required this.referenceNo,
     required this.customerId,
     required this.customer,
+    required this.billerId,
+    required this.biller,
+    required this.warehouseId,
     this.note,
     this.staffNote,
     required this.total,
@@ -40,6 +44,7 @@ class OrderModel {
     this.updatedBy,
     this.updatedAt,
     required this.totalItems,
+    this.pos,
     this.paid = 0,
     this.returnId,
     this.surcharge,
@@ -65,15 +70,38 @@ class OrderModel {
     this.reteFuenteTotal,
     this.reteFuenteAccount,
     this.reteFuenteBase,
+    this.reteIvaPercentage,
+    this.reteIvaTotal,
+    this.reteIvaAccount,
+    this.reteIvaBase,
+    this.reteIcaPercentage,
+    this.reteIcaTotal,
+    this.reteIcaAccount,
+    this.reteIcaBase,
+    this.reteOtherPercentage,
+    this.reteOtherTotal,
+    this.deliveryText,
+    this.reteOtherAccount,
+    this.deliveryDay,
+    this.deliveryTimeId,
+    this.reteOtherBase,
+    this.resolucion,
     required this.documentTypeId,
+    this.destinationReferenceNo,
     this.registrationDate,
+    this.wmsPickingStatus,
     this.orderSaleOrigin = 3,
+    this.wmsPackingStatus,
   });
 
   int? id;
   String? date;
+  String? referenceNo;
   int customerId;
   String customer;
+  int billerId;
+  String biller;
+  int warehouseId;
   dynamic note;
   dynamic staffNote;
   double? total;
@@ -96,6 +124,9 @@ class OrderModel {
   dynamic updatedBy;
   dynamic updatedAt;
   int totalItems;
+  String? deliveryDay;
+  int? deliveryTimeId;
+  int? pos;
   int paid;
   dynamic returnId;
   int? surcharge;
@@ -121,8 +152,24 @@ class OrderModel {
   int? reteFuenteTotal;
   int? reteFuenteAccount;
   dynamic reteFuenteBase;
+  double? reteIvaPercentage;
+  dynamic reteIvaTotal;
+  dynamic reteIvaAccount;
+  dynamic reteIvaBase;
+  dynamic reteIcaPercentage;
+  dynamic reteIcaTotal;
+  dynamic reteIcaAccount;
+  dynamic reteIcaBase;
+  dynamic reteOtherPercentage;
+  dynamic reteOtherTotal;
+  dynamic reteOtherAccount;
+  dynamic reteOtherBase;
+  dynamic resolucion;
   int documentTypeId;
+  dynamic destinationReferenceNo;
   String? registrationDate;
+  dynamic wmsPickingStatus;
+  dynamic wmsPackingStatus;
   int orderSaleOrigin;
 
   factory OrderModel.fromRawJson(String str) =>
@@ -133,9 +180,14 @@ class OrderModel {
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
         id: json["id"],
         date: json["date"],
+        referenceNo: json["reference_no"],
         customerId: json["customer_id"],
         customer: json["customer"],
+        billerId: json["biller_id"],
+        biller: json["biller"],
+        warehouseId: json["warehouse_id"],
         note: json["note"],
+        deliveryText: json['delivery_text'],
         staffNote: json["staff_note"],
         total: double.tryParse(json["total"].toString()),
         productDiscount:
@@ -159,6 +211,9 @@ class OrderModel {
         updatedBy: json["updated_by"],
         updatedAt: json["updated_at"],
         totalItems: json["total_items"],
+        deliveryDay: json["delivery_day"],
+        deliveryTimeId: json["delivery_time_id"],
+        pos: json["pos"],
         paid: parsingToInt(json["paid"]),
         returnId: json["return_id"],
         surcharge: parsingToIntNullable(json["surcharge"]),
@@ -185,10 +240,25 @@ class OrderModel {
         reteFuenteTotal: parsingToIntNullable(json["rete_fuente_total"]),
         reteFuenteAccount: parsingToIntNullable(json["rete_fuente_account"]),
         reteFuenteBase: json["rete_fuente_base"],
+        reteIvaPercentage: parsingToDoubleNullAble(json["rete_iva_percentage"]),
+        reteIvaTotal: json["rete_iva_total"],
+        reteIvaAccount: json["rete_iva_account"],
+        reteIvaBase: json["rete_iva_base"],
+        reteIcaPercentage: json["rete_ica_percentage"],
+        reteIcaTotal: json["rete_ica_total"],
+        reteIcaAccount: json["rete_ica_account"],
+        reteIcaBase: json["rete_ica_base"],
+        reteOtherPercentage: json["rete_other_percentage"],
+        reteOtherTotal: json["rete_other_total"],
+        reteOtherAccount: json["rete_other_account"],
+        reteOtherBase: json["rete_other_base"],
+        resolucion: json["resolucion"],
         documentTypeId: parsingToInt(json["document_type_id"]),
+        destinationReferenceNo: json["destination_reference_no"],
         registrationDate: json["registration_date"],
-        
+        wmsPickingStatus: json["wms_picking_status"],
         orderSaleOrigin: parsingToInt(json["order_sale_origin"]),
+        wmsPackingStatus: json["wms_packing_status"],
       );
 
   String formatedGrandTotal() {
@@ -214,8 +284,12 @@ class OrderModel {
   Map<String, dynamic> toJson({bool toCreateOrder = true}) {
     if (toCreateOrder) {
       return {
+        "reference_no": referenceNo,
         "customer_id": customerId,
         "customer": customer,
+        "biller_id": 2,
+        "biller": biller,
+        "warehouse_id": warehouseId,
         "note": note,
         "staff_note": staffNote,
         "total": total,
@@ -237,10 +311,13 @@ class OrderModel {
         "updated_by": updatedBy,
         "updated_at": updatedAt,
         "total_items": totalItems,
+        "pos": pos,
         "paid": paid,
         "return_id": returnId,
         "surcharge": surcharge,
         "attachment": attachment,
+        "delivery_day": deliveryDay,
+        "delivery_time_id": deliveryTimeId,
         "return_sale_ref": returnSaleRef,
         "sale_id": saleId,
         "return_sale_total": returnSaleTotal,
@@ -262,7 +339,23 @@ class OrderModel {
         "rete_fuente_total": reteFuenteTotal,
         "rete_fuente_account": reteFuenteAccount,
         "rete_fuente_base": reteFuenteBase,
+        "rete_iva_percentage": reteIvaPercentage,
+        "rete_iva_total": reteIvaTotal,
+        "rete_iva_account": reteIvaAccount,
+        "rete_iva_base": reteIvaBase,
+        "rete_ica_percentage": reteIcaPercentage,
+        "rete_ica_total": reteIcaTotal,
+        "rete_ica_account": reteIcaAccount,
+        "rete_ica_base": reteIcaBase,
+        "rete_other_percentage": reteOtherPercentage,
+        "rete_other_total": reteOtherTotal,
+        "rete_other_account": reteOtherAccount,
+        "rete_other_base": reteOtherBase,
+        "resolucion": resolucion,
         "document_type_id": documentTypeId,
+        "destination_reference_no": destinationReferenceNo,
+        "wms_picking_status": wmsPickingStatus,
+        "wms_packing_status": wmsPackingStatus,
         "order_sale_origin": orderSaleOrigin
       };
     } else {
@@ -270,8 +363,12 @@ class OrderModel {
         "id": id,
         "delivery_text": deliveryText,
         "date": date,
+        "reference_no": referenceNo,
         "customer_id": customerId,
         "customer": customer,
+        "biller_id": billerId,
+        "biller": biller,
+        "warehouse_id": warehouseId,
         "note": note,
         "staff_note": staffNote,
         "total": total,
@@ -293,7 +390,10 @@ class OrderModel {
         "updated_by": updatedBy,
         "updated_at": updatedAt,
         "total_items": totalItems,
+        "pos": pos,
         "paid": paid,
+        "delivery_day": deliveryDay,
+        "delivery_time_id": deliveryTimeId,
         "return_id": returnId,
         "surcharge": surcharge,
         "attachment": attachment,
@@ -318,8 +418,24 @@ class OrderModel {
         "rete_fuente_total": reteFuenteTotal,
         "rete_fuente_account": reteFuenteAccount,
         "rete_fuente_base": reteFuenteBase,
+        "rete_iva_percentage": reteIvaPercentage,
+        "rete_iva_total": reteIvaTotal,
+        "rete_iva_account": reteIvaAccount,
+        "rete_iva_base": reteIvaBase,
+        "rete_ica_percentage": reteIcaPercentage,
+        "rete_ica_total": reteIcaTotal,
+        "rete_ica_account": reteIcaAccount,
+        "rete_ica_base": reteIcaBase,
+        "rete_other_percentage": reteOtherPercentage,
+        "rete_other_total": reteOtherTotal,
+        "rete_other_account": reteOtherAccount,
+        "rete_other_base": reteOtherBase,
+        "resolucion": resolucion,
         "document_type_id": documentTypeId,
+        "destination_reference_no": destinationReferenceNo,
         "registration_date": registrationDate,
+        "wms_picking_status": wmsPickingStatus,
+        "wms_packing_status": wmsPackingStatus,
         "order_sale_origin": orderSaleOrigin
       };
     }
@@ -341,6 +457,7 @@ class OrderModel {
   }
 
   @override
+  toString() => referenceNo ?? '';
 
   /// Build an instance of OrderModel given productDetails, user, customer and
   /// customerAddress
@@ -357,8 +474,10 @@ class OrderModel {
         // here we add order tax if needed
         totalTax: orderTotals['total_tax']!,
         saleStatus: 'pending',
+        referenceNo: null,
         documentTypeId: parsingToInt(billerData.orderSalesDocumentTypeDefault),
         addressId: parsingToInt(selectedAddress?.id),
+        pos: 0,
         surcharge: 0,
         api: 1,
         orderTax: 0,
@@ -367,9 +486,13 @@ class OrderModel {
         grandTotal: orderTotals['grand_total']!,
         orderDiscount: orderTotals['order_discount']!,
         customer: userData.companyData?.name ?? userData.name,
+        biller: '',
+        billerId: parsingToInt(billerData.billerId),
         note: '',
         sellerId: parsingToInt(billerData.defaultSellerId),
+        warehouseId: parsingToInt(billerData.defaultWarehouseId),
         createdBy: userData.id,
+        deliveryDay: DateTime.now().toString(),
         // deliveryTimeId:,
         dueDate: null,
         // staffNote: orderBloc.getInternalNote ?? '',
@@ -378,6 +501,7 @@ class OrderModel {
         paymentTerm: null,
         productDiscount: orderTotals['product_discount']!,
         totalDiscount: orderTotals['order_discount']!,
+        deliveryTimeId: deliveryTyId,
         shop: 0,
         orderSaleOrigin: 3,
         staffNote: comment,

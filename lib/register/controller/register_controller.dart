@@ -5,10 +5,7 @@ import 'package:customer_app/models/companies_model.dart';
 import 'package:customer_app/models/country_model.dart';
 import 'package:customer_app/models/documentypes_model.dart';
 import 'package:customer_app/models/state_model.dart';
-import 'package:customer_app/models/subzone_model.dart';
-import 'package:customer_app/models/zone_model.dart';
 import 'package:customer_app/providers/form_data_provider.dart';
-import 'package:customer_app/home/images/controller/image_controller.dart';
 import 'package:customer_app/auth/controller/auth_controller.dart';
 import 'package:customer_app/auth/models/user_model.dart';
 import 'package:customer_app/register/services/register_service.dart';
@@ -74,8 +71,6 @@ class RegisterController extends GetxController {
   List<CountryModel>? _countries;
   List<StateModel>? statesI;
   List<CityModel>? citiesI;
-  List<ZoneModel>? zonesI;
-  List<SubZoneModel>? sZonesI;
 
   //Streams
   final StreamController<List<StateModel>> _statesController =
@@ -83,12 +78,6 @@ class RegisterController extends GetxController {
 
   final StreamController<List<CityModel>> _citiesController =
       StreamController<List<CityModel>>.broadcast();
-
-  final StreamController<List<ZoneModel>> _zonesController =
-      StreamController<List<ZoneModel>>.broadcast();
-
-  final StreamController<List<SubZoneModel>> _sZonesController =
-      StreamController<List<SubZoneModel>>.broadcast();
 
   // getters
 
@@ -104,10 +93,6 @@ class RegisterController extends GetxController {
   /// get CITIES stream
   Stream<List<CityModel>> get citiesStream => _citiesController.stream;
 
-  Stream<List<ZoneModel>> get zonesStream => _zonesController.stream;
-
-  Stream<List<SubZoneModel>> get sZonesStream => _sZonesController.stream;
-
   // setters
   set isLoading(bool value) {
     _isLoading.value = value;
@@ -120,10 +105,6 @@ class RegisterController extends GetxController {
   Function(List<StateModel>) get setStates => _statesController.sink.add;
 
   Function(List<CityModel>) get setCities => _citiesController.sink.add;
-
-  Function(List<ZoneModel>) get setZones => _zonesController.sink.add;
-
-  Function(List<SubZoneModel>) get setSZones => _sZonesController.sink.add;
 
   set canBack(bool value) {
     _canBack.value = value;
@@ -157,31 +138,6 @@ class RegisterController extends GetxController {
     }
   }
 
-  Future<void> reloadZones() async {
-    if (companyData.selCity != null) {
-      companyData.zone = null;
-      final zones =
-          await FormDataProvider.loadCityZones(companyData.selCity!.codigo);
-      zonesI = zones;
-      setZones(zones);
-
-      // delete selected state and city}
-
-    }
-  }
-
-  Future<void> reloadSZones() async {
-    if (companyData.zone != null) {
-      companyData.sZone = null;
-      final sZones =
-          await FormDataProvider.loadZoneSZones(companyData.zone!.zoneCode);
-      sZonesI = sZones;
-      setSZones(sZones);
-
-      // delete selected state and city}
-
-    }
-  }
 
   UserModel userData() {
     if (_user != null) {
@@ -412,8 +368,6 @@ class RegisterController extends GetxController {
   void dispose() {
     super.dispose();
     _statesController.close();
-    _zonesController.close();
-    _sZonesController.close();
     _citiesController.close();
   }
 }

@@ -1,6 +1,5 @@
 import 'package:customer_app/cart/models/cart_item_model.dart';
 import 'package:customer_app/cart/cart/services/cart_service.dart';
-import 'package:customer_app/models/delivery_time_model.dart';
 
 import 'package:customer_app/home/controllers/home_controller.dart';
 import 'package:customer_app/auth/controller/auth_controller.dart';
@@ -39,9 +38,6 @@ class CartController extends GetxController with StateMixin<List<CartItem>> {
 
   CartItem? lastDeleted;
 
-  final RxList<DeliveryTime> _deliveryTimes =
-      List<DeliveryTime>.empty(growable: true).obs;
-
   final Rx<TextEditingController> _dateTextController =
       TextEditingController().obs;
 
@@ -54,13 +50,6 @@ class CartController extends GetxController with StateMixin<List<CartItem>> {
 
   CartItem? selectedCartItem;
 
-  final Rx<DeliveryTime?> _selectedTime = DeliveryTime(
-          id: 0,
-          day: '',
-          time1: const TimeOfDay(hour: 0, minute: 0),
-          time2: const TimeOfDay(hour: 0, minute: 0))
-      .obs;
-
   bool get creatingOrder => _creatingOrder.value;
 
   set creatingOrder(bool value) {
@@ -69,16 +58,11 @@ class CartController extends GetxController with StateMixin<List<CartItem>> {
 
   DateTime? get deliveryDate => _selectedDate.value;
 
-  DeliveryTime? get deliveryTime =>
-      _selectedTime.value?.id == 0 ? null : _selectedTime.value;
 
   TextEditingController get dateTextController => _dateTextController.value;
 
   TextEditingController get commentTextController =>
       _commentTextController.value;
-
-  // ignore: invalid_use_of_protected_member
-  List<DeliveryTime> get deliveryTimes => _deliveryTimes.value;
 
   void updateCart({bool setNull = false}) {
     if (setNull) {
@@ -88,44 +72,12 @@ class CartController extends GetxController with StateMixin<List<CartItem>> {
     saveCurrrentCart();
   }
 
-  Future<void> getNewDeliveryTimes() async {
-    final delvTimes = await service.getAvaibleDelivTimes(
-        _selectedDate.value?.toIso8601String() ?? '',
-        Get.find<HomeController>().selectedAddrss?.location ?? '');
-    // ignore: invalid_use_of_protected_member
-    _deliveryTimes.value.clear();
-    _deliveryTimes.addAll(delvTimes);
-    setDeliveryTime(null);
-  }
-
-  Future<void> setDeliveryDate(DateTime? selectedDate) async {
-    _selectedDate.value = selectedDate;
-    _dateTextController.value.text = formatedDeliveryDate;
-    await getNewDeliveryTimes();
-  }
-
-  void setDeliveryTime(DeliveryTime? selectedTime) {
-    if (selectedTime == null) {
-      _selectedTime.value = DeliveryTime(
-          id: 0,
-          day: '',
-          time1: const TimeOfDay(hour: 0, minute: 0),
-          time2: const TimeOfDay(hour: 0, minute: 0));
-    } else {
-      _selectedTime.value = selectedTime;
-    }
-  }
 
   String get formatedDeliveryDate =>
       parseDateStrES(deliveryDate?.toIso8601String() ?? "");
 
   Future<Map<String, dynamic>> createOrder() async {
-    if (_selectedTime.value == null || _selectedTime.value?.id == 0) {
-      return {
-        "message": "Debes seleccionar una franja horaria para continuar",
-        "only_title": true
-      };
-    }
+    
     final userData = Get.find<AuthController>().state!;
     final billerData = Get.find<AppSettingsController>().state!.billerData!;
     final selAddress = Get.find<HomeController>().selectedAddrss!;
@@ -135,8 +87,8 @@ class CartController extends GetxController with StateMixin<List<CartItem>> {
         billerData,
         selAddress,
         getCartTotals(),
-        (_selectedTime.value?.id ?? 0),
-        (_selectedDate.value?.toIso8601String() ?? ''),
+        ( 0),
+        (''),
         _commentTextController.value.text);
     return result;
   }

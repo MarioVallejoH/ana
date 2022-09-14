@@ -5,8 +5,6 @@
 import 'dart:convert';
 
 import 'package:customer_app/models/state_model.dart';
-import 'package:customer_app/models/subzone_model.dart';
-import 'package:customer_app/models/zone_model.dart';
 import 'package:customer_app/utils/parsing/numeric_paring.dart';
 
 import '../utils/formating/data_formating.dart';
@@ -165,10 +163,6 @@ class CompanyModel {
   StateModel? selState;
 
   CityModel? selCity;
-
-  ZoneModel? zone;
-
-  SubZoneModel? sZone;
 
   static List<CompanyModel> fromJsonList(List<Map> list) {
     List<CompanyModel> customers = [];

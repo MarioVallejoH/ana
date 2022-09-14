@@ -1,8 +1,6 @@
 import 'package:customer_app/models/city_model.dart';
 import 'package:customer_app/models/country_model.dart';
 import 'package:customer_app/models/state_model.dart';
-import 'package:customer_app/models/subzone_model.dart';
-import 'package:customer_app/models/zone_model.dart';
 import 'package:customer_app/register/controller/register_controller.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -191,8 +189,6 @@ class CompRegPage3 extends GetView<RegisterController> {
                     if (controller.companyData.selCity?.codigo !=
                         value?.codigo) {
                       controller.companyData.selCity = value;
-
-                      await controller.reloadZones();
                     }
                   },
                 );
