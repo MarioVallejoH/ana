@@ -78,9 +78,8 @@ class CustomerKindSelection extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () async {
-            await const PersonRegistration().launch(context,
-                duration: const Duration(milliseconds: 300),
-                pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+            await Get.toNamed(Routes.register);
+
           },
           child: Card(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -117,10 +116,6 @@ class CustomerKindSelection extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () async {
-            await Get.toNamed(Routes.register);
-            // await const UserRegister().launch(context,
-            //     duration: const Duration(milliseconds: 300),
-            //     pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
           },
           child: Card(
             elevation: 5,

@@ -24,29 +24,15 @@ class CompRegPage2 extends GetView<RegisterController> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             _docSelection().paddingSymmetric(horizontal: 16, vertical: 6),
-            controller.companyData.typePerson == "1"
-                ? _names()
-                : _socialReason().paddingSymmetric(horizontal: 16, vertical: 6),
-            _commercialName().paddingSymmetric(horizontal: 16, vertical: 6),
-            // TextFormField(
-            //   decoration: InputDecoration(
-            //       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-            //       fillColor: greyLight,
-            //       filled: true,
-            //       hintText: "Matricula Mercantil",
-            //       border: OutlineInputBorder(
-            //           borderRadius: BorderRadius.circular(radiusValue),
-            //           borderSide: BorderSide.none)),
-            // ).paddingSymmetric(horizontal: 16, vertical: 6),
-            _commercialEmail().paddingSymmetric(horizontal: 16, vertical: 6),
-            _commercialPhone().paddingSymmetric(horizontal: 16, vertical: 6),
+            _names(),
+            _email().paddingSymmetric(horizontal: 16, vertical: 6),
           ],
         ),
       ),
     );
   }
 
-  TextFormField _commercialPhone() {
+  TextFormField _phone() {
     return TextFormField(
       initialValue: controller.companyData.phone,
       onChanged: (String? value) {
@@ -57,14 +43,14 @@ class CompRegPage2 extends GetView<RegisterController> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
           fillColor: greyLight,
           filled: true,
-          labelText: "Teléfono empresarial",
+          labelText: "Teléfono",
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(radiusValue),
               borderSide: BorderSide.none)),
     );
   }
 
-  TextFormField _commercialEmail() {
+  TextFormField _email() {
     return TextFormField(
       initialValue: controller.companyData.email,
       textCapitalization: TextCapitalization.sentences,
@@ -79,7 +65,7 @@ class CompRegPage2 extends GetView<RegisterController> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
           fillColor: greyLight,
           filled: true,
-          labelText: "Correo empresarial",
+          labelText: "Correo",
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(radiusValue),
               borderSide: BorderSide.none)),
@@ -212,24 +198,6 @@ class CompRegPage2 extends GetView<RegisterController> {
           ],
         );
       },
-    );
-  }
-
-  TextFormField _socialReason() {
-    return TextFormField(
-      initialValue: controller.companyData.name,
-      onChanged: (String? value) {
-        controller.companyData.name = value ?? "";
-      },
-      decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-          fillColor: greyLight,
-          filled: true,
-          labelText: "Razón social",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(radiusValue),
-            borderSide: BorderSide.none,
-          )),
     );
   }
 

@@ -124,7 +124,7 @@ class UserRegister extends GetView<RegisterController> {
         color: mainColor,
       ),
       title: Text(
-        'Empresa',
+        'Persona',
         style: ThemeConf().normalTextStyle(context),
       ),
       centerTitle: true,

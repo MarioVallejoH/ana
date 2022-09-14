@@ -3,8 +3,6 @@ import 'package:flutter/gestures.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'comp_reg_page1.dart';
 import 'comp_reg_page2.dart';
 import 'comp_reg_page3.dart';
 import 'comp_reg_page4.dart';
@@ -26,9 +24,6 @@ class UserRegisterPages extends GetView<RegisterController> {
       dragStartBehavior: DragStartBehavior.down,
       scrollDirection: Axis.horizontal,
       children: [
-        CompanyRegPage1(
-          key: keyP1,
-        ),
         CompRegPage2(key: keyP2),
         CompRegPage3(key: keyP3),
         CompRegPage4(key: keyP4),

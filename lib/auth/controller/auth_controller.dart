@@ -68,7 +68,7 @@ class AuthController extends GetxController with StateMixin<UserDataModel?> {
 
   Future<bool> login(BuildContext context) async {
     // final resp = {'': 2};
-
+    change(null, status: RxStatus.loading());
     final resp = await DataProvider.postPetition(_loginEndp, _toJson(),
         withAuthToken: false);
 
@@ -84,10 +84,8 @@ class AuthController extends GetxController with StateMixin<UserDataModel?> {
       }
 
       // final authController = Get.find<AuthController>();
-      service
-          .saveAccessToken(resp['tokens_data']['access_token']);
-      service
-          .saveRefreshToken(resp['tokens_data']['refresh_token']);
+      service.saveAccessToken(resp['tokens_data']['access_token']);
+      service.saveRefreshToken(resp['tokens_data']['refresh_token']);
 
       Get.toNamed(Routes.home);
       return true;

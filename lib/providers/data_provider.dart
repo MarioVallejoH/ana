@@ -2,9 +2,8 @@
 
 import 'dart:convert';
 
-import 'package:customer_app/auth/controller/auth_controller.dart';
+import 'package:customer_app/auth/services/auth_service.dart';
 import 'package:dio/dio.dart';
-import 'package:get/get.dart' hide Response;
 import 'package:nb_utils/nb_utils.dart';
 
 import 'dart:async';
@@ -22,8 +21,7 @@ class DataProvider {
     var dio = Dio();
     dio.options.baseUrl = UrlResourcesService.host;
 
-    dio.options.headers = Get.find<AuthController>()
-        .service
+    dio.options.headers = AuthService()
         .getHeaders(withAuthToken: withAuthToken);
     // to seconds to milliseconds, seconds * 1000
     dio.options.receiveTimeout = awaitTime * 1000;
@@ -72,7 +70,7 @@ class DataProvider {
       };
     } catch (e) {
       // await logError(e, from: 'Api provider, http.post');
-      log(e);
+      log(e.toString());
       return {
         'success': false,
 
@@ -92,8 +90,7 @@ class DataProvider {
     // headers['Access-Control-Allow-Origin'] = '*';
 
     dio.options.baseUrl = UrlResourcesService.host;
-    dio.options.headers = Get.find<AuthController>()
-        .service.getHeaders(withAuthToken: auth);
+    dio.options.headers = AuthService().getHeaders(withAuthToken: auth);
     dio.options.method = 'GET';
     // String url =
     //     (dataBloc.userData == null ? HOST : dataBloc.userData?.hostUrl ?? '') +
@@ -159,8 +156,7 @@ class AuthInterceptor extends InterceptorsWrapper {
       RequestOptions options, RequestInterceptorHandler handler) async {
     // print(options.baseUrl + options.path);
 
-    var accessToken = Get.find<AuthController>()
-        .service.accessToken;
+    var accessToken = AuthService().accessToken;
     if (accessToken.isEmpty) {
       log('trying to send request without token exist!');
       return super.onRequest(options, handler);
@@ -182,10 +178,8 @@ class AuthInterceptor extends InterceptorsWrapper {
 
     super.onError(err, handler);
     if (err.response?.statusCode == 401) {
-      if (Get.find<AuthController>()
-        .service.refreshToken.isNotEmpty) {
-        final refresh = await Get.find<AuthController>()
-        .service.refreshTokens();
+      if (AuthService().refreshToken.isNotEmpty) {
+        final refresh = await AuthService().refreshTokens();
         if (refresh) {
           final response =
               await requestRetrier.scheduleRequestRetry(err.requestOptions);
@@ -194,8 +188,7 @@ class AuthInterceptor extends InterceptorsWrapper {
         }
         handler.next(err);
       }
-      Get.find<AuthController>()
-        .service.logout();
+      AuthService().logout();
     }
   }
 }
@@ -228,8 +221,7 @@ class DioConnectivityRequestRetrier {
               queryParameters: requestOptions.queryParameters,
               options: Options(
                   method: requestOptions.method,
-                  headers: Get.find<AuthController>()
-        .service.getHeaders(withAuthToken: true,),),
+                  headers: AuthService().getHeaders(withAuthToken: true,),),
             ),
           );
         }

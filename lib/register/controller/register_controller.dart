@@ -39,7 +39,13 @@ class RegisterController extends GetxController {
 
   final RegisterService service;
 
-  CompanyModel companyData = CompanyModel();
+  CompanyModel companyData = CompanyModel(
+    typePerson: "1",
+    tipoRegimen: "1",
+    customerGroupId: 1,
+    customerGroupName: "Consumidor final",
+    location: "",
+  );
 
   UserModel? _user;
 
@@ -196,7 +202,8 @@ class RegisterController extends GetxController {
           username: "",
           firstName: "",
           firstLastname: "",
-          password: "");
+          password: "",
+          );
       return _user!;
     }
   }
@@ -260,21 +267,16 @@ class RegisterController extends GetxController {
     int page = pageController.page?.toInt() ?? 0;
     switch (page) {
       case 0:
-        if (isValidFormP1()) {
-          _goToNextPage();
-        }
-        break;
-      case 1:
         if (await isValidFormP2()) {
           _goToNextPage();
         }
         break;
-      case 2:
+      case 1:
         if (isValidFormP3()) {
           _goToNextPage();
         }
         break;
-      case 3:
+      case 2:
         if (await isValidFormP4()) {
           await createCustomer(context);
         }
@@ -292,8 +294,7 @@ class RegisterController extends GetxController {
     final Map<String, dynamic> json = {
       "user_data": _user?.toJson(),
       "company_data": companyData.customerToJson(),
-      "create_address": createAddress,
-      "image": await Get.find<ImageController>().imageB64()
+      "create_address": createAddress
     };
 
     return json;
@@ -336,7 +337,9 @@ class RegisterController extends GetxController {
       final authController = Get.find<AuthController>();
       authController.unameController.text = _user?.username ?? '';
       authController.passwordController.text = _user?.password ?? '';
-      Get.off(Routes.register);
+      Get.offAndToNamed(Routes.login);
+      authController.unameController.text = _user?.username??'';
+      authController.passwordController.text = _user?.password??'';
       await authController.login(context);
     } else {
       String title = 'Ha ocurrido un error';

@@ -41,7 +41,7 @@ class OrderCard extends GetView<OrdersListController> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      orderModel.referenceNo ?? "",
+                      '${orderModel.id}',
                       style: ThemeConf().buttonsSmallTextStyle(
                         context,
                       ),

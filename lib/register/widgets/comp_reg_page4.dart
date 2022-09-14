@@ -20,11 +20,6 @@ class CompRegPage4 extends GetView<RegisterController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            const ImagePick(
-              height: 120,
-              width: double.infinity,
-              optionsAlignment: MainAxisAlignment.spaceEvenly,
-            ).paddingSymmetric(horizontal: 16, vertical: 10),
             controller.companyData.typePerson == "2"
                 ? _names()
                 : const SizedBox(
